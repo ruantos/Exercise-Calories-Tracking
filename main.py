@@ -3,9 +3,12 @@ import datetime as dt
 import os
 
 NUTRI_ENDPOINT = "https://trackapi.nutritionix.com/v2/natural/exercise"
-HEADERS = {
+NUTRI_HEADERS = {
     "x-app-id": os.environ.get("api_id"),
     "x-app-key": os.environ.get("api_key")
+}
+SHEETY_HEADERS = {
+    "Authorization": f"Bearer {os.environ.get('sheety_token')}"
 }
 
 
@@ -29,7 +32,7 @@ def get_info():
         "height_cm": "177",
         "age": "21"
     }
-    response = requests.post(url=NUTRI_ENDPOINT, json=PARAMETERS, headers=HEADERS)
+    response = requests.post(url=NUTRI_ENDPOINT, json=PARAMETERS, headers=NUTRI_HEADERS)
     response.raise_for_status()
     return response.json()
 
@@ -48,7 +51,7 @@ def post_exercise():
             }
         }
 
-        response = requests.post("https://api.sheety.co/24b450108fe68fbd5786567c0a23a9db/workoutTracking/workouts", json=row)        
+        response = requests.post("https://api.sheety.co/24b450108fe68fbd5786567c0a23a9db/workoutTracking/workouts", json=row, headers=SHEETY_HEADERS)        
         response.raise_for_status()
 
 
